@@ -10,8 +10,8 @@
         <div class="box">
             <p class="box-title">Interactive Simulations for Physics Concepts</p>
             <div class = "dropdown">
-                <button class="dropbtn">Simulations</button>
-                <div class = "drop-content">
+                <button onclick="show_dropdown()" class="dropbtn">Simulations</button>
+                <div id="drop_content" >
                     <a href="projectile.html">Projectile Motion</a>
                     <a href="spring.html">Mass-Spring System</a>
                 </div>    
@@ -19,5 +19,14 @@
             <a class="about-box" href="about.html">About</a>
         </div>
         <p class="below-box">© 2025 Howard University | CSCI 120</p>
+
+        <script>
+            function show_dropdown(){
+                drop = document.getElementById("drop_content")
+                drop.classList.toggle("show")
+            }
+
+
+        </script>
     </body>
 </html>

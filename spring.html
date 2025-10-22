@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Mass-Spring System</title>
+    <link rel="stylesheet" href="styles.css"> 
+  </head>
+
+  <body>
+    <div class="controls">
+      
+      <div class="control_line">
+        <label for="m1">Mass 1: <span id="m1_value">5.00</span></label>
+        <input type="range" id="m1" min="1" max="10" value="5" step="0.01">
+      </div>
+
+      <div class="control_line">
+        <label for="m2">Mass 2: <span id="m2_value">5.00</span></label>
+        <input type="range" id="m2" min="1" max="10" value="5" step="0.01">
+      </div>
+
+      <div class="control_line">
+        <label for="k">k: <span id="k_value">50.00</span></label>
+        <input type="range" id="k" min="1" max="100" value="50" step="0.01">
+      </div>
+
+      <div class="control_line">
+        <label for="mk">μ: <span id="mk_value">0.40</span></label>
+        <input type="range" id="mk" min="0.1" max="0.9" value="0.4" step="0.01">
+      </div>
+      
+      <button onclick="reset()">Reset</button>
+      <span class="pause_button" onclick="start_stop()">⏯️</span>
+    </div>
+ 
+
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+    <script src="spring.js"></script>
+
+    <script>
+      // Update displayed slider values in real time
+      const sliders = ["m1", "m2", "k", "mk"];
+      sliders.forEach(id => {
+        const slider = document.getElementById(id);
+        const valueSpan = document.getElementById(id + "_value");
+
+        slider.addEventListener("input", () => {
+          valueSpan.textContent = parseFloat(slider.value).toFixed(2);
+        });
+      });
+    </script>
+  </body>
+</html>

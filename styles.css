@@ -3,6 +3,7 @@ body {
     padding: 0;
     height: 100%;
     background-color: #f9f6f6; 
+    overflow: hidden;
 }
 
 .title {
@@ -68,7 +69,8 @@ body {
     background-color: #2980b9;
 }
 
-.drop-content {
+
+#drop_content {
     background-color: white;
     position: absolute; 
     top: 100%;                 
@@ -81,8 +83,11 @@ body {
     overflow: hidden;
     margin-top: 0.8vh; 
 }
+#drop_content.show{
+    display:block
 
-.drop-content a {
+}
+#drop_content a {
     display: block;
     padding: 1vh 2vw;
     color: #333;
@@ -92,12 +97,8 @@ body {
     font-size: 1.5vw; 
 }
 
-.drop-content a:hover {
+#drop_content a:hover {
     background-color: #f1f1f1;
-}
-
-.dropdown:hover .drop-content {
-    display: block;
 }
 .about-box {
     position: absolute;      
@@ -117,3 +118,28 @@ body {
     font-size: 1.5vw;
 }
 
+ /*for projectile and spring*/
+.controls { 
+    text-align: center;
+    position: absolute;
+    top: 3vh;             
+    right: 2vw;            
+    background: rgba(255, 255, 255, 0.85);
+    padding: 2vh 2vw;      
+    border-radius: 1vw;    
+    box-shadow: 0 0.5vh 1vh rgba(0,0,0,0.3); 
+    width: 17vw;           
+    font-size: 1.3vw; 
+    line-height: 5vh;     
+}
+.controls button{
+    font-size: larger;
+    margin-left: 1vh;
+}
+.pause_button{
+    font-size: 3vh;
+    margin-left: 2vh;
+}
+.control_line{
+    display: block;
+}

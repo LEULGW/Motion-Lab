@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Projectile Motion</title>
+    <link rel="stylesheet" href="styles.css"> 
+  </head>
+
+  <body>
+    <!-- Controls container -->
+    <div class="controls">
+      <div class = "control_line">
+        <label for="velocity">Velocity:</label>
+        <input type="range" id="velocity" min="1" max="20" value="15">
+        <span id="velocity_value">15</span>
+      </div>
+      <div class = "control_line">
+        <label for="angle">Angle:</label>
+        <input type="range" id="angle" min="25" max="90" value="45">
+        <span id="angle_value">45</span>
+      </div>
+        <button onclick="reset_projectile()">Reset</button>
+        <span class="pause_button" onclick="toggle_motion()">⏯️</span>
+
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+    <script src="projectile.js"></script>
+  </body>
+</html>
