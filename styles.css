@@ -143,3 +143,159 @@ body {
 .control_line{
     display: block;
 }
+body.sim-page {
+    margin: 0;
+    padding: 0;
+    overflow: visible;   
+    height: 100vh;       
+}
+.stage {
+  height: 100vh;        
+  overflow: hidden;    
+  position: absolute;   
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.hidden {
+  display: none;        
+}
+
+#bgCanvas {
+    z-index: -1;
+}
+
+
+
+/* About Page */
+.about-container {
+    max-width: 900px;
+    padding: 4vh 4vw;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    border-radius: 2vw;
+    box-shadow: 0 1vh 2vh rgba(0,0,0,0.2);
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.about-title {
+    font-size: 3vw;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 2vh;
+}
+
+.about-text {
+    font-size: 1.5vw;
+    line-height: 1.5;
+    color: #34495e;
+    margin-bottom: 2vh;
+}
+
+
+.back-button {
+    display: inline-block;
+    margin-top: 3vh;
+    text-decoration: none;
+    font-size: 1.8vw;
+    padding: 1vh 2vw;
+    background-color: #354b59;
+    color: white;
+    border-radius: 1vw;
+    box-shadow: 0 0.4vh 0.8vh rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #52768f;
+}
+
+/* SPRING SIM PAGE BACKGROUND */
+
+
+body.spring-page {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+    position: relative;
+}
+
+/* Subtle grid overlay */
+.spring-background::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: -2;
+}
+
+/* Floating blurred shapes */
+.spring-background::after {
+    content: "";
+    position: absolute;
+    width: 40vw;
+    height: 40vw;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    filter: blur(80px);
+    top: 10%;
+    left: 50%;
+    z-index: -1;
+}
+
+.spring-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* Canvas container inside the background */
+#springCanvasContainer {
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* Controls styling */
+.controls {
+    text-align: center;
+    position: absolute;
+    top: 3vh;
+    right: 2vw;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 2vh 2vw;
+    border-radius: 1vw;
+    box-shadow: 0 0.5vh 1vh rgba(0,0,0,0.3);
+    width: 17vw;
+    font-size: 1.3vw;
+    line-height: 5vh;
+    z-index: 10;
+}
+
+.controls button {
+    font-size: larger;
+    margin-left: 1vh;
+}
+
+.pause_button {
+    font-size: 3vh;
+    margin-left: 2vh;
+}
+
+.control_line {
+    display: block;
+}
+

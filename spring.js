@@ -1,138 +1,130 @@
-let x1 =7.0;
-let x2 = 14.0;
-let k = 50;
-let l0 = 7.0;
-let m1 = 5.0;
-let m2 = 5.0;
-let v1 = 0.0;
-let v2 = 0.0;
-let ms = 0.75;
-let mk = 0.4;
+let x1 = 7.0, x2 = 14.0;
+let k = 50, l0 = 7.0;
+let m1 = 5.0, m2 = 5.0;
+let v1 = 0, v2 = 0;
+let ms = 0.75, mk = 0.4;
 let g = 9.81;
-let a1 = 0;
-let a2 = 0;
-let changeInTime = 0.07;
+let a1 = 0, a2 = 0;
+let dt = 0.07;
 let running = false;
-
-let scaleFactor; // to convert simulation units to pixels
-
-// initial states for reset
-const initial = {
-  x1: 7.0,
-  x2: 14.0,
-  v1: 0.0,
-  v2: 0.0,
-  a1: 0,
-  a2: 0,
-};
+let scale_factor;
+const initial = { x1:7, x2:14, v1:0, v2:0, a1:0, a2:0 };
+let dragging_1=false, dragging_2=false;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  scaleFactor = windowWidth / 30; // scale simulation units to screen width
+    let cnv = createCanvas(windowWidth, windowHeight);
+    cnv.parent("springCanvasContainer");
+    scale_factor = windowWidth / 30;
 }
 
 function draw() {
-  background(220);
-  translate(windowWidth * 0.1, windowHeight * 0.55); // origin slightly lower to make floor visible
-  scale(1, -1); // flip y-axis
+    clear(); 
+    background(0,0,0,0); 
+    translate(windowWidth*0.1, windowHeight*0.55);
+    scale(1,-1);
 
-  if (running) simulatePhysics();
+    m1 = parseFloat(document.getElementById("m1").value);
+    m2 = parseFloat(document.getElementById("m2").value);
+    k = parseFloat(document.getElementById("k").value);
+    mk = parseFloat(document.getElementById("mk").value);
 
-  // convert simulation x-values to pixels
-  let px1 = x1 * scaleFactor;
-  let px2 = x2 * scaleFactor;
+    document.getElementById("m1_value").innerText = m1;
+    document.getElementById("m2_value").innerText = m2;
+    document.getElementById("k_value").innerText = k;
+    document.getElementById("mk_value").innerText = mk;
 
-  let wallHeight = windowHeight * 0.05;   // wall height in vh
-  let floorOffset = windowHeight * 0.01;  // floor thickness and shift downward
-  let massSize = windowWidth * 0.02;      // mass size in vw
+    if(running) simulate_physics();
 
+    let px1 = x1 * scale_factor;
+    let px2 = x2 * scale_factor;
+    let wall_height = windowHeight*0.05;
+    let floor_offset = windowHeight*0.01;
+    let mass_size = windowWidth*0.02;
 
-  // draw spring 1
-  stroke(100, 100, 255);
-  strokeWeight(2);
-  line(0, 0, px1, 0);
+    function draw_spring(x_start, x_end, y, coils=8, amplitude=10){
+        stroke(255);
+        strokeWeight(2);
+        noFill();
+        beginShape();
+        for(let i=0;i<=100;i++){
+            let t = i/100;
+            let xi = x_start + t*(x_end-x_start);
+            let yi = y + amplitude*sin(TWO_PI*coils*t);
+            vertex(xi,yi);
+        }
+        endShape();
+    }
 
-  // draw spring 2
-  stroke(50, 50, 50);
-  strokeWeight(2);
-  line(px1, 0, px2, 0);
+    draw_spring(0, px1, 0);
+    draw_spring(px1, px2, 0);
+    draw_spring(px2, windowWidth*0.7, 0);
 
-  // draw spring 3
-  stroke(100, 255, 100);
-  strokeWeight(2);
-  line(px2, 0, windowWidth * 0.7, 0);
-  // draw fixed wall at left
-  stroke(0);
-  strokeWeight(wallHeight * 0.5);
-  line(0, -wallHeight, 0, wallHeight);
+    stroke(0);
+    strokeWeight(wall_height*0.5);
+    line(0,-wall_height,0,wall_height);
+    line(windowWidth*0.7,-wall_height,windowWidth*0.7,wall_height);
 
-  // draw fixed wall at right (70% of width)
-  stroke(0);
-  strokeWeight(wallHeight * 0.5);
-  line(windowWidth * 0.7, -wallHeight, windowWidth * 0.7, wallHeight);
+    strokeWeight(floor_offset);
+    line(0,-floor_offset*2.5,windowWidth*0.7,-floor_offset*2.5);
 
-  // draw floor slightly lower
-  stroke(0);
-  strokeWeight(floorOffset);
-  line(0, -floorOffset * 2.5, windowWidth * 0.7, -floorOffset * 2.5); 
-
-  // draw masses
-  fill(255, 100, 225);
-  ellipse(px1, 0, massSize, massSize);
-  fill(100, 255, 225);
-  ellipse(px2, 0, massSize, massSize);
+    fill(255,100,225);
+    ellipse(px1,0,mass_size,mass_size);
+    fill(100,255,225);
+    ellipse(px2,0,mass_size,mass_size);
 }
 
-function simulatePhysics() {
-  let f1 = (k / 100) * (l0 - x1) + (k / 100) * (x2 - x1 - l0);
-  let f2 = (-k / 100) * (x2 - x1 - l0) + (k / 100) * (l0 - (x2 - l0));
-
-  let fn1 = m1 * g;
-  let fn2 = m2 * g;
-
-  let ff1, ff2;
-  let direction1, direction2;
-
-  if (Math.abs(f1) <= ms * fn1) {
-    ff1 = f1;
-  } else {
-    direction1 = v1 > 0 ? 1 : -1;
-    ff1 = mk * fn1 * -1 * direction1;
-  }
-
-  if (Math.abs(f2) <= ms * fn2) {
-    ff2 = f2;
-  } else {
-    direction2 = v2 > 0 ? 1 : -1;
-    ff2 = mk * fn2 * -1 * direction2;
-  }
-
-  f1 += ff1;
-  f2 += ff2;
-
-  let a1Old = a1;
-  let a2Old = a2;
-
-  a1 = f1 / m1;
-  a2 = f2 / m2;
-
-  v1 = v1 + ((a1 + a1Old) / 2) * changeInTime;
-  v2 = v2 + ((a2 + a2Old) / 2) * changeInTime;
-
-  x1 = x1 + v1 * changeInTime;
-  x2 = x2 + v2 * changeInTime;
+function simulate_physics(){
+    let f1 = (k/100)*(l0-x1) + (k/100)*(x2-x1-l0);
+    let f2 = (-k/100)*(x2-x1-l0) + (k/100)*(l0-(x2-l0));
+    let fn1 = m1*g, fn2 = m2*g;
+    let ff1, ff2, dir1, dir2;
+    ff1 = Math.abs(f1)<=ms*fn1 ? f1 : mk*fn1*-Math.sign(v1);
+    ff2 = Math.abs(f2)<=ms*fn2 ? f2 : mk*fn2*-Math.sign(v2);
+    f1 += ff1; f2 += ff2;
+    let a1_old=a1, a2_old=a2;
+    a1=f1/m1; a2=f2/m2;
+    v1+= (a1+a1_old)/2*dt; v2+= (a2+a2_old)/2*dt;
+    x1+=v1*dt; x2+=v2*dt;
 }
 
-function startStop() {
-  running = !running;
+function start_stop(){running=!running;}
+
+function mousePressed(){
+    let px1=x1*scale_factor, px2=x2*scale_factor;
+    let mx=mouseX-windowWidth*0.1, my=windowHeight*0.55-mouseY;
+    let mass_size=windowWidth*0.02;
+    if(dist(mx,my,px1,0)<mass_size/2){dragging_1=true; running=false;}
+    else if(dist(mx,my,px2,0)<mass_size/2){dragging_2=true; running=false;}
+}
+
+function mouseDragged(){
+    if(dragging_1){x1=constrain((mouseX-windowWidth*0.1)/scale_factor,0,x2-1);}
+    if(dragging_2){x2=constrain((mouseX-windowWidth*0.1)/scale_factor,x1+1,(windowWidth*0.7)/scale_factor);}
+}
+
+function mouseReleased(){
+    if(dragging_1||dragging_2){dragging_1=false; dragging_2=false; running=true;}
 }
 
 function reset() {
-  x1 = initial.x1;
-  x2 = initial.x2;
-  v1 = initial.v1;
-  v2 = initial.v2;
-  a1 = initial.a1;
-  a2 = initial.a2;
-  running = false;
+    running = false;
+
+    x1 = initial.x1;
+    x2 = initial.x2;
+    v1 = 0;
+    v2 = 0;
+    a1 = 0;
+    a2 = 0;
+
+
+    document.getElementById("m1").value = m1 = 5.0;
+    document.getElementById("m2").value = m2 = 5.0;
+    document.getElementById("k").value  = k  = 50;
+    document.getElementById("mk").value = mk = 0.4;
+
+    document.getElementById("m1_value").innerText = 5.0;
+    document.getElementById("m2_value").innerText = 5.0;
+    document.getElementById("k_value").innerText  = 50;
+    document.getElementById("mk_value").innerText = 0.4;
 }
+
